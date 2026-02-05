@@ -1,0 +1,124 @@
+{
+  "quizzes": [
+    {
+      "id": "q1",
+      "topic_id": "basics",
+      "question": "What is the correct way to create a variable in Python?",
+      "options": ["var x = 5", "x = 5", "int x = 5", "let x = 5"],
+      "correct_answer": 1,
+      "explanation": "In Python, you simply use the assignment operator (=) without declaring a type. Python is dynamically typed.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q2",
+      "topic_id": "basics",
+      "question": "Which of the following is NOT a valid data type in Python?",
+      "options": ["int", "float", "string", "str"],
+      "correct_answer": 2,
+      "explanation": "The correct data type is 'str', not 'string'. Python uses 'str' for text data.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q3",
+      "topic_id": "control-flow",
+      "question": "What does the 'break' statement do in a loop?",
+      "options": [
+        "Pauses the loop temporarily",
+        "Exits the loop completely",
+        "Skips the current iteration",
+        "Restarts the loop"
+      ],
+      "correct_answer": 1,
+      "explanation": "The 'break' statement terminates the loop immediately and continues with the next statement after the loop.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q4",
+      "topic_id": "control-flow",
+      "question": "What is the output of: for i in range(3): print(i)",
+      "options": ["0 1 2", "1 2 3", "0 1 2 3", "1 2"],
+      "correct_answer": 0,
+      "explanation": "range(3) generates numbers from 0 to 2 (3 is exclusive). So it prints 0, 1, 2.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q5",
+      "topic_id": "functions",
+      "question": "How do you define a function in Python?",
+      "options": [
+        "function myFunc():",
+        "def myFunc():",
+        "func myFunc():",
+        "define myFunc():"
+      ],
+      "correct_answer": 1,
+      "explanation": "Python uses the 'def' keyword to define functions, followed by the function name and parentheses.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q6",
+      "topic_id": "functions",
+      "question": "What is a lambda function?",
+      "options": [
+        "A large function",
+        "An anonymous function",
+        "A recursive function",
+        "A deprecated function type"
+      ],
+      "correct_answer": 1,
+      "explanation": "Lambda functions are anonymous (unnamed) functions defined using the 'lambda' keyword for simple operations.",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q7",
+      "topic_id": "data-structures",
+      "question": "Which data structure is mutable?",
+      "options": ["tuple", "string", "list", "int"],
+      "correct_answer": 2,
+      "explanation": "Lists are mutable, meaning their contents can be changed after creation. Tuples and strings are immutable.",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q8",
+      "topic_id": "data-structures",
+      "question": "What does a dictionary store?",
+      "options": [
+        "Only strings",
+        "Key-value pairs",
+        "Only numbers",
+        "Ordered sequences"
+      ],
+      "correct_answer": 1,
+      "explanation": "Dictionaries store data as key-value pairs, where each key maps to a value.",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q9",
+      "topic_id": "oop-basics",
+      "question": "What is the __init__ method in a class?",
+      "options": [
+        "A destructor",
+        "A constructor",
+        "A static method",
+        "A class variable"
+      ],
+      "correct_answer": 1,
+      "explanation": "__init__ is the constructor method that initializes a new object when it's created.",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "q10",
+      "topic_id": "oop-advanced",
+      "question": "What is inheritance in OOP?",
+      "options": [
+        "Creating multiple objects",
+        "A class inheriting properties from another class",
+        "Hiding data",
+        "Overloading operators"
+      ],
+      "correct_answer": 1,
+      "explanation": "Inheritance allows a class to inherit attributes and methods from a parent class, promoting code reuse.",
+      "difficulty": "advanced"
+    }
+  ]
+}

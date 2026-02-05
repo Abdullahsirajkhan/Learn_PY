@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracking - Learn_Py</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Progress Tracking</h1>
+            <p>Monitor your Python learning journey</p>
+        </header>
+
+        <a href="/" class="back-link">← Back to Dashboard</a>
+
+        <div class="content-section">
+            <h2>Overall Progress</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Topics</h3>
+                    <div class="stat-value" id="totalTopics">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Completed</h3>
+                    <div class="stat-value" id="completedTopics">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Mastery</h3>
+                    <div class="stat-value" id="averageMastery">0%</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgressBar" style="width: 0%;">
+                    <span id="overallProgressText">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Topic-wise Progress</h2>
+            <ul class="topic-list" id="topicProgress">
+                <li class="loading">Loading progress...</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script>
+        async function loadProgress() {
+            const topics = await fetchTopics();
+            const progressData = await fetchProgress();
+            const overall = progressData.overall;
+            const progressList = progressData.progress;
+
+            // Update overall stats
+            document.getElementById('totalTopics').textContent = overall.total_topics || 0;
+            document.getElementById('completedTopics').textContent = overall.completed_topics || 0;
+            document.getElementById('averageMastery').textContent = (overall.average_mastery || 0) + '%';
+            
+            const completionPercentage = overall.completion_percentage || 0;
+            document.getElementById('overallProgressBar').style.width = completionPercentage + '%';
+            document.getElementById('overallProgressText').textContent = completionPercentage + '%';
+
+            // Create progress map
+            const progressMap = {};
+            progressList.forEach(p => {
+                progressMap[p.topic_id] = p;
+            });
+
+            // Display topic-wise progress
+            const container = document.getElementById('topicProgress');
+            container.innerHTML = '';
+
+            topics.forEach(topic => {
+                const progress = progressMap[topic.id];
+                const masteryLevel = progress ? progress.mastery_level : 0;
+                const timesReviewed = progress ? progress.times_reviewed : 0;
+                const lastReviewed = progress ? formatDate(progress.last_reviewed) : 'Never';
+
+                const li = document.createElement('li');
+                li.className = 'topic-item';
+                li.innerHTML = `
+                    <div class="topic-info">
+                        <h3>${topic.title}</h3>
+                        <p>${topic.description}</p>
+                        <span class="${getDifficultyBadgeClass(topic.difficulty)}">${topic.difficulty}</span>
+                        <p style="margin-top: 5px; font-size: 0.85em; color: #999;">
+                            Reviewed: ${timesReviewed} times | Last: ${lastReviewed}
+                        </p>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="mastery-level">${masteryLevel.toFixed(1)}%</div>
+                        <div class="progress-bar" style="width: 150px; margin-top: 10px;">
+                            <div class="progress-fill" style="width: ${masteryLevel}%; justify-content: flex-end; padding-right: 5px; font-size: 0.8em;">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(li);
+            });
+        }
+
+        loadProgress();
+    </script>
+</body>
+</html>

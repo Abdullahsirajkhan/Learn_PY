@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Map - Learn_Py</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗺️ Python Mind Map</h1>
+            <p>Visualize your Python learning journey</p>
+        </header>
+
+        <a href="/" class="back-link">← Back to Dashboard</a>
+
+        <div class="content-section">
+            <div id="mindmap"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script>
+        async function createMindMap() {
+            const topics = await fetchTopics();
+            const progressData = await fetchProgress();
+            const progressList = progressData.progress;
+
+            // Create progress map
+            const progressMap = {};
+            progressList.forEach(p => {
+                progressMap[p.topic_id] = p;
+            });
+
+            // Prepare data for mind map
+            const data = {
+                name: "Python\nMastery",
+                children: []
+            };
+
+            // Group by difficulty
+            const beginner = { name: "Beginner", children: [] };
+            const intermediate = { name: "Intermediate", children: [] };
+            const advanced = { name: "Advanced\n(OOP)", children: [] };
+
+            topics.forEach(topic => {
+                const progress = progressMap[topic.id];
+                const masteryLevel = progress ? progress.mastery_level : 0;
+                
+                const node = {
+                    name: topic.title,
+                    mastery: masteryLevel,
+                    subtopics: topic.subtopics
+                };
+
+                if (topic.difficulty === 'beginner') {
+                    beginner.children.push(node);
+                } else if (topic.difficulty === 'intermediate') {
+                    intermediate.children.push(node);
+                } else {
+                    advanced.children.push(node);
+                }
+            });
+
+            data.children = [beginner, intermediate, advanced];
+
+            // Create SVG
+            const width = document.getElementById('mindmap').clientWidth;
+            const height = 600;
+
+            const svg = d3.select("#mindmap")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            const g = svg.append("g")
+                .attr("transform", `translate(${width / 2},${height / 2})`);
+
+            // Create tree layout
+            const tree = d3.tree()
+                .size([2 * Math.PI, Math.min(width, height) / 2 - 100])
+                .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
+
+            const root = d3.hierarchy(data);
+            tree(root);
+
+            // Draw links
+            g.selectAll(".link")
+                .data(root.links())
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .attr("d", d3.linkRadial()
+                    .angle(d => d.x)
+                    .radius(d => d.y))
+                .style("fill", "none")
+                .style("stroke", "#ccc")
+                .style("stroke-width", 2);
+
+            // Draw nodes
+            const node = g.selectAll(".node")
+                .data(root.descendants())
+                .enter()
+                .append("g")
+                .attr("class", "node")
+                .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+
+            node.append("circle")
+                .attr("r", d => d.depth === 0 ? 15 : d.depth === 1 ? 10 : 7)
+                .style("fill", d => {
+                    if (d.depth === 0) return "#3498db";
+                    if (d.depth === 1) return "#9b59b6";
+                    const mastery = d.data.mastery || 0;
+                    if (mastery >= 80) return "#2ecc71";
+                    if (mastery >= 40) return "#f39c12";
+                    return "#e74c3c";
+                })
+                .style("stroke", "white")
+                .style("stroke-width", 2);
+
+            node.append("text")
+                .attr("dy", ".31em")
+                .attr("x", d => d.x < Math.PI === !d.children ? 6 : -6)
+                .attr("text-anchor", d => d.x < Math.PI === !d.children ? "start" : "end")
+                .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
+                .text(d => d.data.name)
+                .style("font-size", d => d.depth === 0 ? "14px" : d.depth === 1 ? "12px" : "10px")
+                .style("font-weight", d => d.depth <= 1 ? "bold" : "normal")
+                .style("fill", "#333");
+
+            // Add legend
+            const legend = svg.append("g")
+                .attr("transform", `translate(20, 20)`);
+
+            const legendData = [
+                { color: "#2ecc71", label: "Mastered (≥80%)" },
+                { color: "#f39c12", label: "In Progress (40-79%)" },
+                { color: "#e74c3c", label: "Not Started (<40%)" }
+            ];
+
+            legendData.forEach((item, i) => {
+                const legendRow = legend.append("g")
+                    .attr("transform", `translate(0, ${i * 25})`);
+
+                legendRow.append("circle")
+                    .attr("r", 7)
+                    .attr("cx", 10)
+                    .attr("cy", 10)
+                    .style("fill", item.color);
+
+                legendRow.append("text")
+                    .attr("x", 25)
+                    .attr("y", 14)
+                    .text(item.label)
+                    .style("font-size", "12px")
+                    .style("fill", "#333");
+            });
+        }
+
+        createMindMap();
+    </script>
+</body>
+</html>
