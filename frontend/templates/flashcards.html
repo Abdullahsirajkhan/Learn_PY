@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards - Learn_Py</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎴 Python Flashcards</h1>
+            <p>Learn with spaced repetition</p>
+        </header>
+
+        <a href="/" class="back-link">← Back to Dashboard</a>
+
+        <div class="content-section">
+            <h2>Select a Topic</h2>
+            <select id="topicSelect" class="btn" style="width: 100%; max-width: 400px;">
+                <option value="">All Topics</option>
+            </select>
+        </div>
+
+        <div class="content-section" id="flashcardContainer">
+            <div class="loading">Loading flashcards...</div>
+        </div>
+
+        <div class="content-section" id="ratingSection" style="display: none;">
+            <h3>How well did you know this?</h3>
+            <div class="rating-buttons">
+                <button class="rating-btn" onclick="rateCard(1)">1 - Not at all</button>
+                <button class="rating-btn" onclick="rateCard(2)">2 - Poorly</button>
+                <button class="rating-btn" onclick="rateCard(3)">3 - Okay</button>
+                <button class="rating-btn" onclick="rateCard(4)">4 - Well</button>
+                <button class="rating-btn" onclick="rateCard(5)">5 - Perfectly</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script>
+        let allFlashcards = [];
+        let currentFlashcards = [];
+        let currentCardIndex = 0;
+        let isFlipped = false;
+
+        async function init() {
+            const topics = await fetchTopics();
+            const topicSelect = document.getElementById('topicSelect');
+            
+            topics.forEach(topic => {
+                const option = document.createElement('option');
+                option.value = topic.id;
+                option.textContent = topic.title;
+                topicSelect.appendChild(option);
+            });
+
+            topicSelect.addEventListener('change', async (e) => {
+                const topicId = e.target.value || null;
+                await loadFlashcards(topicId);
+            });
+
+            await loadFlashcards();
+        }
+
+        async function loadFlashcards(topicId = null) {
+            const flashcards = await fetchFlashcards(topicId);
+            allFlashcards = shuffleArray(flashcards);
+            currentFlashcards = [...allFlashcards];
+            currentCardIndex = 0;
+            displayCurrentCard();
+        }
+
+        function displayCurrentCard() {
+            const container = document.getElementById('flashcardContainer');
+            const ratingSection = document.getElementById('ratingSection');
+            ratingSection.style.display = 'none';
+            isFlipped = false;
+
+            if (currentCardIndex >= currentFlashcards.length) {
+                container.innerHTML = '<div class="success">🎉 You\'ve reviewed all flashcards! Select a different topic or start over.</div>';
+                return;
+            }
+
+            const card = currentFlashcards[currentCardIndex];
+
+            container.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3>Card ${currentCardIndex + 1} of ${currentFlashcards.length}</h3>
+                    <span class="${getDifficultyBadgeClass(card.difficulty)}">${card.difficulty}</span>
+                </div>
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-content" id="cardContent">
+                        ${card.front}
+                    </div>
+                    <div class="flashcard-hint">Click to flip</div>
+                </div>
+            `;
+        }
+
+        function flipCard() {
+            const card = currentFlashcards[currentCardIndex];
+            const flashcard = document.getElementById('flashcard');
+            const content = document.getElementById('cardContent');
+            const ratingSection = document.getElementById('ratingSection');
+
+            if (!isFlipped) {
+                content.textContent = card.back;
+                flashcard.classList.add('flipped');
+                isFlipped = true;
+                ratingSection.style.display = 'block';
+            } else {
+                content.textContent = card.front;
+                flashcard.classList.remove('flipped');
+                isFlipped = false;
+                ratingSection.style.display = 'none';
+            }
+        }
+
+        async function rateCard(rating) {
+            const card = currentFlashcards[currentCardIndex];
+            await reviewFlashcard(card.id, card.topic_id, rating);
+            
+            currentCardIndex++;
+            displayCurrentCard();
+        }
+
+        init();
+    </script>
+</body>
+</html>

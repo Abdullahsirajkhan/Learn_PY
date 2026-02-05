@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn_Py - Master Python from Zero to OOP</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐍 Learn_Py</h1>
+            <p>Master Python from Zero to Object-Oriented Programming</p>
+        </header>
+
+        <div class="stats" id="statsContainer">
+            <div class="stat-card">
+                <h3>Total Topics</h3>
+                <div class="stat-value" id="totalTopics">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Completed Topics</h3>
+                <div class="stat-value" id="completedTopics">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Mastery</h3>
+                <div class="stat-value" id="averageMastery">0%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Overall Progress</h3>
+                <div class="stat-value" id="overallProgress">0%</div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <a href="/quizzes" class="card">
+                <span class="card-icon">📝</span>
+                <h2>Quizzes</h2>
+                <p>Test your knowledge with interactive quizzes covering all Python topics</p>
+            </a>
+
+            <a href="/flashcards" class="card">
+                <span class="card-icon">🎴</span>
+                <h2>Flashcards</h2>
+                <p>Learn with spaced repetition using flashcards for each concept</p>
+            </a>
+
+            <a href="/mindmap" class="card">
+                <span class="card-icon">🗺️</span>
+                <h2>Mind Map</h2>
+                <p>Visualize the entire Python learning journey from basics to OOP</p>
+            </a>
+
+            <a href="/progress" class="card">
+                <span class="card-icon">📊</span>
+                <h2>Progress Tracking</h2>
+                <p>Monitor your learning progress and identify areas for improvement</p>
+            </a>
+
+            <a href="/learning-path" class="card">
+                <span class="card-icon">🎯</span>
+                <h2>Learning Path</h2>
+                <p>Follow a structured path from Python basics to advanced OOP concepts</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script>
+        async function loadDashboardStats() {
+            const progressData = await fetchProgress();
+            const overall = progressData.overall;
+
+            document.getElementById('totalTopics').textContent = overall.total_topics || 0;
+            document.getElementById('completedTopics').textContent = overall.completed_topics || 0;
+            document.getElementById('averageMastery').textContent = (overall.average_mastery || 0) + '%';
+            document.getElementById('overallProgress').textContent = (overall.completion_percentage || 0) + '%';
+        }
+
+        loadDashboardStats();
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Path - Learn_Py</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Learning Path</h1>
+            <p>Follow a structured journey from basics to OOP</p>
+        </header>
+
+        <a href="/" class="back-link">← Back to Dashboard</a>
+
+        <div class="content-section">
+            <h2>Python Learning Roadmap</h2>
+            <p style="margin-bottom: 20px; color: #666;">
+                Follow this structured path to master Python from fundamentals to advanced Object-Oriented Programming.
+                Topics are ordered by difficulty and build upon each other.
+            </p>
+            <ul class="topic-list" id="learningPath">
+                <li class="loading">Loading learning path...</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script>
+        async function loadLearningPath() {
+            const topics = await fetchTopics();
+            const progressData = await fetchProgress();
+            const progressList = progressData.progress;
+
+            // Create progress map
+            const progressMap = {};
+            progressList.forEach(p => {
+                progressMap[p.topic_id] = p;
+            });
+
+            // Sort topics by order
+            topics.sort((a, b) => a.order - b.order);
+
+            const container = document.getElementById('learningPath');
+            container.innerHTML = '';
+
+            topics.forEach((topic, index) => {
+                const progress = progressMap[topic.id];
+                const masteryLevel = progress ? progress.mastery_level : 0;
+                const isCompleted = masteryLevel >= 80;
+                const isInProgress = masteryLevel > 0 && masteryLevel < 80;
+
+                const li = document.createElement('li');
+                li.className = 'topic-item';
+                li.innerHTML = `
+                    <div class="topic-info">
+                        <h3>
+                            ${index + 1}. ${topic.title}
+                            ${isCompleted ? '✅' : isInProgress ? '🔄' : '⭕'}
+                        </h3>
+                        <p>${topic.description}</p>
+                        <span class="${getDifficultyBadgeClass(topic.difficulty)}">${topic.difficulty}</span>
+                        <div style="margin-top: 10px;">
+                            <strong>Subtopics:</strong>
+                            <ul style="list-style: disc; margin-left: 20px; margin-top: 5px;">
+                                ${topic.subtopics.map(subtopic => `<li>${subtopic}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="mastery-level">${masteryLevel.toFixed(1)}%</div>
+                        <div class="progress-bar" style="width: 150px; margin-top: 10px;">
+                            <div class="progress-fill" style="width: ${masteryLevel}%; justify-content: flex-end; padding-right: 5px; font-size: 0.8em;">
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <a href="/quizzes" class="btn" style="padding: 8px 16px; font-size: 0.9em; margin-right: 5px; text-decoration: none;">
+                                Quiz
+                            </a>
+                            <a href="/flashcards" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9em; text-decoration: none;">
+                                Study
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(li);
+            });
+        }
+
+        loadLearningPath();
+    </script>
+</body>
+</html>

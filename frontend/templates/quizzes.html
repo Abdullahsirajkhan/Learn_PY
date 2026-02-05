@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzes - Learn_Py</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 Python Quizzes</h1>
+            <p>Test your Python knowledge</p>
+        </header>
+
+        <a href="/" class="back-link">← Back to Dashboard</a>
+
+        <div class="content-section">
+            <h2>Select a Topic</h2>
+            <div id="topicFilter">
+                <select id="topicSelect" class="btn" style="width: 100%; max-width: 400px;">
+                    <option value="">All Topics</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="content-section" id="quizContainer">
+            <div class="loading">Loading quizzes...</div>
+        </div>
+
+        <div id="resultModal" class="content-section" style="display: none;">
+            <h2 id="resultTitle"></h2>
+            <p id="resultExplanation"></p>
+            <p><strong>Current Mastery Level:</strong> <span id="resultMastery"></span></p>
+            <button class="btn" onclick="nextQuiz()">Next Question</button>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script>
+        let allQuizzes = [];
+        let currentQuizzes = [];
+        let currentQuizIndex = 0;
+        let selectedAnswer = null;
+
+        async function init() {
+            const topics = await fetchTopics();
+            const topicSelect = document.getElementById('topicSelect');
+            
+            topics.forEach(topic => {
+                const option = document.createElement('option');
+                option.value = topic.id;
+                option.textContent = topic.title;
+                topicSelect.appendChild(option);
+            });
+
+            topicSelect.addEventListener('change', async (e) => {
+                const topicId = e.target.value || null;
+                await loadQuizzes(topicId);
+            });
+
+            await loadQuizzes();
+        }
+
+        async function loadQuizzes(topicId = null) {
+            const quizzes = await fetchQuizzes(topicId);
+            allQuizzes = shuffleArray(quizzes);
+            currentQuizzes = [...allQuizzes];
+            currentQuizIndex = 0;
+            displayCurrentQuiz();
+        }
+
+        function displayCurrentQuiz() {
+            const container = document.getElementById('quizContainer');
+            document.getElementById('resultModal').style.display = 'none';
+            
+            if (currentQuizIndex >= currentQuizzes.length) {
+                container.innerHTML = '<div class="success">🎉 You\'ve completed all available quizzes! Select a different topic or try again.</div>';
+                return;
+            }
+
+            const quiz = currentQuizzes[currentQuizIndex];
+            selectedAnswer = null;
+
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <h2>Question ${currentQuizIndex + 1} of ${currentQuizzes.length}</h2>
+                    <p style="margin-top: 15px; font-size: 1.2em;">${quiz.question}</p>
+                    <span class="${getDifficultyBadgeClass(quiz.difficulty)}">${quiz.difficulty}</span>
+                </div>
+                <ul class="quiz-options" id="quizOptions">
+                    ${quiz.options.map((option, index) => `
+                        <li class="quiz-option" data-index="${index}">
+                            ${option}
+                        </li>
+                    `).join('')}
+                </ul>
+                <button class="btn" id="submitBtn" onclick="submitAnswer()" disabled>Submit Answer</button>
+            `;
+
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedAnswer = parseInt(this.dataset.index);
+                    document.getElementById('submitBtn').disabled = false;
+                });
+            });
+        }
+
+        async function submitAnswer() {
+            if (selectedAnswer === null) return;
+
+            const quiz = currentQuizzes[currentQuizIndex];
+            const result = await submitQuiz(quiz.id, selectedAnswer, quiz.topic_id);
+
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach((option, index) => {
+                option.style.pointerEvents = 'none';
+                if (index === quiz.correct_answer) {
+                    option.classList.add('correct');
+                } else if (index === selectedAnswer) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            document.getElementById('submitBtn').style.display = 'none';
+            
+            const resultModal = document.getElementById('resultModal');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultExplanation = document.getElementById('resultExplanation');
+            const resultMastery = document.getElementById('resultMastery');
+
+            resultTitle.textContent = result.correct ? '✅ Correct!' : '❌ Incorrect';
+            resultTitle.style.color = result.correct ? 'var(--secondary-color)' : 'var(--danger-color)';
+            resultExplanation.textContent = result.explanation;
+            resultMastery.textContent = result.mastery_level + '%';
+            
+            resultModal.style.display = 'block';
+        }
+
+        function nextQuiz() {
+            currentQuizIndex++;
+            displayCurrentQuiz();
+        }
+
+        init();
+    </script>
+</body>
+</html>

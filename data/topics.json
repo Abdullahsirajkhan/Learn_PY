@@ -1,0 +1,84 @@
+{
+  "topics": [
+    {
+      "id": "basics",
+      "title": "Python Basics",
+      "description": "Learn the fundamentals of Python programming",
+      "order": 1,
+      "subtopics": ["Variables", "Data Types", "Operators", "Input/Output"],
+      "difficulty": "beginner"
+    },
+    {
+      "id": "control-flow",
+      "title": "Control Flow",
+      "description": "Master conditional statements and loops",
+      "order": 2,
+      "subtopics": ["if/elif/else", "for loops", "while loops", "break/continue"],
+      "difficulty": "beginner"
+    },
+    {
+      "id": "functions",
+      "title": "Functions",
+      "description": "Learn to write reusable code with functions",
+      "order": 3,
+      "subtopics": ["Defining Functions", "Parameters", "Return Values", "Lambda Functions"],
+      "difficulty": "beginner"
+    },
+    {
+      "id": "data-structures",
+      "title": "Data Structures",
+      "description": "Work with lists, tuples, sets, and dictionaries",
+      "order": 4,
+      "subtopics": ["Lists", "Tuples", "Sets", "Dictionaries", "Comprehensions"],
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "modules",
+      "title": "Modules and Packages",
+      "description": "Organize and reuse code with modules",
+      "order": 5,
+      "subtopics": ["Importing Modules", "Creating Modules", "Standard Library", "pip"],
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "file-handling",
+      "title": "File Handling",
+      "description": "Read from and write to files",
+      "order": 6,
+      "subtopics": ["Reading Files", "Writing Files", "File Methods", "Context Managers"],
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "exceptions",
+      "title": "Exception Handling",
+      "description": "Handle errors gracefully in your programs",
+      "order": 7,
+      "subtopics": ["try/except", "raise", "finally", "Custom Exceptions"],
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "oop-basics",
+      "title": "OOP - Classes and Objects",
+      "description": "Introduction to Object-Oriented Programming",
+      "order": 8,
+      "subtopics": ["Classes", "Objects", "Attributes", "Methods", "__init__"],
+      "difficulty": "advanced"
+    },
+    {
+      "id": "oop-advanced",
+      "title": "OOP - Inheritance and Polymorphism",
+      "description": "Advanced OOP concepts",
+      "order": 9,
+      "subtopics": ["Inheritance", "Polymorphism", "Method Overriding", "super()"],
+      "difficulty": "advanced"
+    },
+    {
+      "id": "oop-special",
+      "title": "OOP - Special Methods",
+      "description": "Magic methods and advanced OOP features",
+      "order": 10,
+      "subtopics": ["__str__", "__repr__", "Operator Overloading", "Property Decorators"],
+      "difficulty": "advanced"
+    }
+  ]
+}

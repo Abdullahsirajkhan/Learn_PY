@@ -1,0 +1,109 @@
+{
+  "flashcards": [
+    {
+      "id": "f1",
+      "topic_id": "basics",
+      "front": "What is Python?",
+      "back": "Python is a high-level, interpreted programming language known for its simple syntax and readability. It supports multiple programming paradigms including procedural, object-oriented, and functional programming.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "f2",
+      "topic_id": "basics",
+      "front": "What are Python's primitive data types?",
+      "back": "Python's main primitive data types are:\n- int (integers)\n- float (floating-point numbers)\n- str (strings)\n- bool (Boolean: True/False)",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "f3",
+      "topic_id": "control-flow",
+      "front": "What is the difference between 'break' and 'continue'?",
+      "back": "'break' exits the loop entirely, while 'continue' skips the rest of the current iteration and moves to the next iteration of the loop.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "f4",
+      "topic_id": "control-flow",
+      "front": "What is a for loop used for?",
+      "back": "A for loop is used to iterate over a sequence (like a list, tuple, string, or range) and execute a block of code for each item in the sequence.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "f5",
+      "topic_id": "functions",
+      "front": "What is a function parameter?",
+      "back": "A parameter is a variable in a function definition that receives a value when the function is called. It allows you to pass data into the function.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "f6",
+      "topic_id": "functions",
+      "front": "What does 'return' do in a function?",
+      "back": "The 'return' statement exits a function and optionally passes back a value to the caller. Without return, a function returns None by default.",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "f7",
+      "topic_id": "data-structures",
+      "front": "What is the difference between a list and a tuple?",
+      "back": "Lists are mutable (can be changed after creation) and use square brackets []. Tuples are immutable (cannot be changed) and use parentheses ().",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "f8",
+      "topic_id": "data-structures",
+      "front": "How do you access a dictionary value?",
+      "back": "You can access a dictionary value using the key in square brackets: my_dict['key'] or using the .get() method: my_dict.get('key').",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "f9",
+      "topic_id": "modules",
+      "front": "What is a Python module?",
+      "back": "A module is a file containing Python code (functions, classes, variables) that can be imported and reused in other Python programs using the 'import' statement.",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "f10",
+      "topic_id": "file-handling",
+      "front": "What is a context manager in Python?",
+      "back": "A context manager (using 'with' statement) ensures proper resource management by automatically closing files or releasing resources after use, even if an error occurs.",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "f11",
+      "topic_id": "exceptions",
+      "front": "What is exception handling?",
+      "back": "Exception handling is a way to catch and handle errors gracefully using try/except blocks, preventing program crashes and providing meaningful error messages.",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "f12",
+      "topic_id": "oop-basics",
+      "front": "What is a class in Python?",
+      "back": "A class is a blueprint for creating objects. It defines attributes (data) and methods (functions) that the objects of that class will have.",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "f13",
+      "topic_id": "oop-basics",
+      "front": "What is the difference between a class and an object?",
+      "back": "A class is a template/blueprint that defines structure and behavior. An object is an instance of a class - a concrete realization with specific values.",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "f14",
+      "topic_id": "oop-advanced",
+      "front": "What is inheritance?",
+      "back": "Inheritance is a mechanism where a new class (child/derived) inherits attributes and methods from an existing class (parent/base), promoting code reuse.",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "f15",
+      "topic_id": "oop-advanced",
+      "front": "What is polymorphism?",
+      "back": "Polymorphism allows objects of different classes to be treated as objects of a common base class. It enables methods to work differently based on the object calling them.",
+      "difficulty": "advanced"
+    }
+  ]
+}
