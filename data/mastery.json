@@ -1,3 +1,13 @@
 {
-  "progress": []
+  "progress": [
+    {
+      "user_id": "default_user",
+      "topic_id": "basics",
+      "mastery_level": 100.0,
+      "last_reviewed": "2026-02-05T12:21:20.653034",
+      "times_reviewed": 1,
+      "correct_answers": 1,
+      "total_attempts": 1
+    }
+  ]
 }
